@@ -1,4 +1,4 @@
-import { TASK_CATEGORIES } from '../constants/index.js';
+import mongoose from 'mongoose';
 
 const parseBoolean = (value) => {
   if (typeof value === 'boolean') return value;
@@ -30,9 +30,7 @@ const parseString = (str) => {
 const parseCategory = (value) => {
   const parsed = parseString(value);
   if (!parsed) return;
-  return TASK_CATEGORIES.includes(parsed.toLowerCase())
-    ? parsed.toLowerCase()
-    : undefined;
+  return mongoose.Types.ObjectId.isValid(parsed) ? parsed : undefined;
 };
 
 const parseDate = (value) => {

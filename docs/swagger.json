@@ -21,6 +21,10 @@
     {
       "name": "Tasks",
       "description": "Operations about tasks"
+    },
+    {
+      "name": "Categories",
+      "description": "Operations about task categories"
     }
   ],
   "paths": {
@@ -427,6 +431,50 @@
           }
         }
       }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get all categories",
+        "description": "Returns a list of all available task categories",
+        "operationId": "getCategories",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found categories!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Category"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -729,6 +777,24 @@
           }
         },
         "minProperties": 1
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "objectid",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": {
+            "type": "string",
+            "example": "work"
+          }
+        },
+        "required": [
+          "_id",
+          "name"
+        ]
       }
     },
     "responses": {

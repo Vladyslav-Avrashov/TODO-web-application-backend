@@ -1,0 +1,12 @@
+type: object
+properties:
+  _id:
+    type: string
+    format: objectid
+    example: '507f1f77bcf86cd799439011'
+  name:
+    type: string
+    example: 'work'
+required:
+  - _id
+  - name

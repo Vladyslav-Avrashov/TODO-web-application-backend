@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import tasksRouter from './routers/tasks.js';
+import categoriesRouter from './routers/categories.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -12,6 +13,7 @@ export const setupServer = () => {
   app.use(cors());
   app.use(express.json());
   app.use('/tasks', tasksRouter);
+  app.use('/categories', categoriesRouter);
   app.use('/api-docs', swaggerDocs());
   app.use(errorHandler);
 

@@ -14,6 +14,8 @@ servers:
 tags:
   - name: Tasks
     description: Operations about tasks
+  - name: Categories
+    description: Operations about task categories
 
 paths:
   /tasks:
@@ -29,6 +31,10 @@ paths:
       $ref: '../swagger/paths/tasks/{taskId}/patch.yaml'
     delete:
       $ref: '../swagger/paths/tasks/{taskId}/delete.yaml'
+
+  /categories:
+    get:
+      $ref: '../swagger/paths/categories/get.yaml'
 
 components:
   schemas:

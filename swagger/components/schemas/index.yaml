@@ -1,5 +1,7 @@
 Task:
   $ref: './Task.yaml'
+Category:
+  $ref: './Category.yaml'
 Error:
   $ref: './Error.yaml'
 TaskCreate:

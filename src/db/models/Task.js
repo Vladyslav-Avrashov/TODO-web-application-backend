@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 import { saveErrorHandler, setUpdateSettings } from './hooks.js';
-import { TASK_CATEGORIES } from '../../constants/index.js';
 
 const taskSchema = new Schema(
   {
@@ -24,8 +23,8 @@ const taskSchema = new Schema(
     },
     category: {
       type: String,
-      enum: TASK_CATEGORIES,
-      default: 'personal',
+      ref: 'Category',
+      required: true,
     },
     dueDate: {
       type: Date,

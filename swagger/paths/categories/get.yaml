@@ -1,0 +1,28 @@
+tags:
+  - Categories
+summary: Get all categories
+description: Returns a list of all available task categories
+operationId: getCategories
+
+responses:
+  '200':
+    description: Successful operation
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found categories!
+            data:
+              type: array
+              items:
+                $ref: '../../components/schemas/Category.yaml'
+  '400':
+    $ref: '../../components/responses/BadRequest.yaml'
+  '500':
+    $ref: '../../components/responses/InternalServerError.yaml'
