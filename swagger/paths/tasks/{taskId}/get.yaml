@@ -1,0 +1,35 @@
+tags:
+  - Tasks
+summary: Get task by ID
+description: Retrieve a specific task by its ID
+parameters:
+  - name: taskId
+    in: path
+    required: true
+    description: Task ID
+    schema:
+      type: string
+      pattern: '^[0-9a-fA-F]{24}$'
+      example: '64f8b1c2a1b2c3d4e5f67890'
+responses:
+  '200':
+    description: Successfully found task
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully found task with id 64f8b1c2a1b2c3d4e5f67890!'
+            data:
+              $ref: '../../../components/schemas/Task.yaml'
+  '400':
+    $ref: '../../../components/responses/InvalidId.yaml'
+  '404':
+    $ref: '../../../components/responses/TaskNotFound.yaml'
+  '500':
+    $ref: '../../../components/responses/InternalServerError.yaml'

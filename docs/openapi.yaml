@@ -1,0 +1,37 @@
+openapi: 3.1.1
+info:
+  title: Tasks API
+  description: RESTful API for managing tasks with CRUD operations
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: vladisloveavrashov@gmail.com
+
+servers:
+  - url: http://localhost:3000
+  - url: https://todo-web-application-backend-j0kb.onrender.com
+
+tags:
+  - name: Tasks
+    description: Operations about tasks
+
+paths:
+  /tasks:
+    get:
+      $ref: '../swagger/paths/tasks/get.yaml'
+    post:
+      $ref: '../swagger/paths/tasks/post.yaml'
+
+  /tasks/{taskId}:
+    get:
+      $ref: '../swagger/paths/tasks/{taskId}/get.yaml'
+    patch:
+      $ref: '../swagger/paths/tasks/{taskId}/patch.yaml'
+    delete:
+      $ref: '../swagger/paths/tasks/{taskId}/delete.yaml'
+
+components:
+  schemas:
+    $ref: '../swagger/components/schemas/index.yaml'
+  responses:
+    $ref: '../swagger/components/responses/index.yaml'

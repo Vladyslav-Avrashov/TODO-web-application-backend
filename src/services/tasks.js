@@ -1,12 +1,12 @@
 import TaskCollection from '../db/models/Task.js';
 import { calcPaginationData } from '../utils/calcPaginationData.js';
-import { sortList } from '../constants/index.js';
+import { SORT_LIST } from '../constants/index.js';
 
 export const getTasks = async ({
   page = 1,
   perPage = 10,
   sortBy,
-  sortOrder = sortList[0],
+  sortOrder = SORT_LIST[0],
   filters = {},
 }) => {
   const skip = (page - 1) * perPage;
@@ -18,6 +18,14 @@ export const getTasks = async ({
 
   if (typeof filters.isDone === 'boolean') {
     query.where('isDone').equals(filters.isDone);
+  }
+
+  if (filters.category) {
+    query.where('category').equals(filters.category);
+  }
+
+  if (filters.dueDate) {
+    query.where('dueDate').equals(filters.dueDate);
   }
 
   const totalItems = await TaskCollection.countDocuments(query.getFilter());

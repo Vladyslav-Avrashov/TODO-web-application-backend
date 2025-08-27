@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { TASK_CATEGORIES } from '../constants/index.js';
 
 const titleField = Joi.string().min(3).max(30).messages({
   'string.base': 'Title must be a string',
@@ -25,6 +26,18 @@ const priorityField = Joi.number().integer().min(1).max(10).messages({
   'number.max': 'Priority must be no more than 10',
 });
 
+const categoryField = Joi.string()
+  .valid(...TASK_CATEGORIES)
+  .messages({
+    'string.base': 'Category must be a string',
+    'any.only': `Category must be one of: ${TASK_CATEGORIES.join(', ')}`,
+  });
+
+const dueDateField = Joi.date().iso().messages({
+  'date.base': 'Due date must be a valid date',
+  'date.format': 'Due date must be in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)',
+});
+
 export const taskAddSchema = Joi.object({
   title: titleField
     .required()
@@ -34,6 +47,8 @@ export const taskAddSchema = Joi.object({
     .messages({ 'any.required': 'Description is required' }),
   isDone: isDoneField,
   priority: priorityField,
+  category: categoryField,
+  dueDate: dueDateField,
 });
 
 export const taskUpdateSchema = Joi.object({
@@ -41,6 +56,8 @@ export const taskUpdateSchema = Joi.object({
   description: descriptionField,
   isDone: isDoneField,
   priority: priorityField,
+  category: categoryField,
+  dueDate: dueDateField,
 })
   .min(1)
   .messages({

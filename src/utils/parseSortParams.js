@@ -1,9 +1,9 @@
-import { sortList } from '../constants/index.js';
+import { SORT_LIST } from '../constants/index.js';
 
 export const parseSortParams = ({ sortOrder, sortBy }, sortFields) => {
-  const parsedSortOrder = sortList.includes(sortOrder)
+  const parsedSortOrder = SORT_LIST.includes(sortOrder)
     ? sortOrder
-    : sortList[0];
+    : SORT_LIST[0];
   const parsedSortBy = sortFields.includes(sortBy) ? sortBy : sortFields[0];
 
   return {

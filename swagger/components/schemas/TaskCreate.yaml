@@ -1,0 +1,52 @@
+type: object
+properties:
+  title:
+    type: string
+    minLength: 3
+    maxLength: 30
+    example: 'Complete project documentation'
+    description: Title of the task
+  description:
+    type: string
+    minLength: 3
+    maxLength: 300
+    example: 'Write comprehensive documentation for the new API endpoints'
+    description: Detailed description of the task
+  priority:
+    type: integer
+    minimum: 1
+    maximum: 10
+    default: 5
+    example: 7
+    description: Priority level of the task (1-10)
+  category:
+    type: string
+    enum:
+      [
+        work,
+        personal,
+        health,
+        education,
+        finance,
+        home,
+        shopping,
+        travel,
+        social,
+        hobby,
+      ]
+    default: personal
+    example: 'work'
+    description: Category of the task
+  dueDate:
+    type: string
+    format: date-time
+    example: '2024-09-15T10:00:00.000Z'
+    description: Due date for the task completion
+  isDone:
+    type: boolean
+    default: false
+    example: false
+    description: Whether the task is completed
+required:
+  - title
+  - description

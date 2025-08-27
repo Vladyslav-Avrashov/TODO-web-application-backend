@@ -1,0 +1,8 @@
+description: Task not found
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/Error.yaml'
+    example:
+      status: 404
+      message: 'Task not found'

@@ -1,0 +1,8 @@
+description: Invalid task ID format
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/Error.yaml'
+    example:
+      status: 400
+      message: 'Invalid task ID format'

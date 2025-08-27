@@ -1,0 +1,10 @@
+Task:
+  $ref: './Task.yaml'
+Error:
+  $ref: './Error.yaml'
+TaskCreate:
+  $ref: './TaskCreate.yaml'
+TaskUpdate:
+  $ref: './TaskUpdate.yaml'
+PaginatedTasks:
+  $ref: './PaginatedTasks.yaml'

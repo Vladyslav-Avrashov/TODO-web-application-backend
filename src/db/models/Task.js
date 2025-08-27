@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { saveErrorHandler, setUpdateSettings } from './hooks.js';
+import { TASK_CATEGORIES } from '../../constants/index.js';
 
 const taskSchema = new Schema(
   {
@@ -21,6 +22,15 @@ const taskSchema = new Schema(
       max: 10,
       default: 5,
     },
+    category: {
+      type: String,
+      enum: TASK_CATEGORIES,
+      default: 'personal',
+    },
+    dueDate: {
+      type: Date,
+      required: false,
+    },
   },
   {
     versionKey: false,
@@ -40,6 +50,8 @@ export const tasksSortFields = [
   'description',
   'isDone',
   'priority',
+  'category',
+  'dueDate',
   'createdAt',
   'updatedAt',
 ];

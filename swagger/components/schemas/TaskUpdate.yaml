@@ -1,0 +1,47 @@
+type: object
+properties:
+  title:
+    type: string
+    minLength: 3
+    maxLength: 30
+    example: 'Updated task title'
+    description: Title of the task
+  description:
+    type: string
+    minLength: 3
+    maxLength: 300
+    example: 'Updated task description'
+    description: Detailed description of the task
+  priority:
+    type: integer
+    minimum: 1
+    maximum: 10
+    example: 8
+    description: Priority level of the task (1-10)
+  category:
+    type: string
+    enum:
+      [
+        work,
+        personal,
+        health,
+        education,
+        finance,
+        home,
+        shopping,
+        travel,
+        social,
+        hobby,
+      ]
+    example: 'health'
+    description: Category of the task
+  dueDate:
+    type: string
+    format: date-time
+    example: '2024-09-20T15:00:00.000Z'
+    description: Due date for the task completion
+  isDone:
+    type: boolean
+    example: true
+    description: Whether the task is completed
+minProperties: 1

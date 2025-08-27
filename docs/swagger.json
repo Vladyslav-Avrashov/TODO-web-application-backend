@@ -1,0 +1,840 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Tasks API",
+    "description": "RESTful API for managing tasks with CRUD operations",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "vladisloveavrashov@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://todo-web-application-backend-j0kb.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Tasks",
+      "description": "Operations about tasks"
+    }
+  ],
+  "paths": {
+    "/tasks": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Get all tasks",
+        "description": "Retrieve a paginated list of tasks with optional filtering and sorting",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "Number of tasks per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Field to sort by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "_id",
+                "title",
+                "description",
+                "isDone",
+                "priority",
+                "category",
+                "dueDate",
+                "createdAt",
+                "updatedAt"
+              ],
+              "default": "createdAt",
+              "example": "priority"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "asc",
+              "example": "desc"
+            }
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "description": "Filter by priority level",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "example": 5
+            }
+          },
+          {
+            "name": "isDone",
+            "in": "query",
+            "description": "Filter by completion status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "example": false
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by category",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "work",
+                "personal",
+                "health",
+                "education",
+                "finance",
+                "home",
+                "shopping",
+                "travel",
+                "social",
+                "hobby"
+              ],
+              "example": "work"
+            }
+          },
+          {
+            "name": "dueDate",
+            "in": "query",
+            "description": "Filter by due date",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-09-15T10:00:00.000Z"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found tasks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found tasks!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PaginatedTasks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Create a new task",
+        "description": "Create a new task with title and description",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreate"
+              },
+              "examples": {
+                "basic_task": {
+                  "summary": "Basic task creation",
+                  "value": {
+                    "title": "Complete project documentation",
+                    "description": "Write comprehensive documentation for the new API endpoints"
+                  }
+                },
+                "full_task": {
+                  "summary": "Task with all fields",
+                  "value": {
+                    "title": "Review code changes",
+                    "description": "Review pull request #123 and provide feedback",
+                    "priority": 8,
+                    "category": "work",
+                    "dueDate": "2024-09-15T10:00:00.000Z",
+                    "isDone": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created a task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully created a task!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/tasks/{taskId}": {
+      "get": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Get task by ID",
+        "description": "Retrieve a specific task by its ID",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "Task ID",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$",
+              "example": "64f8b1c2a1b2c3d4e5f67890"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully found task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found task with id 64f8b1c2a1b2c3d4e5f67890!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "404": {
+            "$ref": "#/components/responses/TaskNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Update task by ID",
+        "description": "Update specific fields of a task",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "Task ID",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$",
+              "example": "64f8b1c2a1b2c3d4e5f67890"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdate"
+              },
+              "examples": {
+                "complete_task": {
+                  "summary": "Mark task as completed",
+                  "value": {
+                    "isDone": true
+                  }
+                },
+                "change_priority": {
+                  "summary": "Change task priority",
+                  "value": {
+                    "priority": 9
+                  }
+                },
+                "update_multiple_fields": {
+                  "summary": "Update multiple fields",
+                  "value": {
+                    "title": "Updated task title",
+                    "priority": 8,
+                    "category": "health",
+                    "dueDate": "2024-09-20T15:00:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully patched a task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully patched a task!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/TaskNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tasks"
+        ],
+        "summary": "Delete task by ID",
+        "description": "Delete a specific task by its ID",
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "Task ID",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$",
+              "example": "64f8b1c2a1b2c3d4e5f67890"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Task successfully deleted (no content)"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidId"
+          },
+          "404": {
+            "$ref": "#/components/responses/TaskNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{24}$",
+            "example": "64f8b1c2a1b2c3d4e5f67890",
+            "description": "Unique identifier for the task"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "Complete project documentation",
+            "description": "Title of the task"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300,
+            "example": "Write comprehensive documentation for the new API endpoints",
+            "description": "Detailed description of the task"
+          },
+          "isDone": {
+            "type": "boolean",
+            "default": false,
+            "example": false,
+            "description": "Whether the task is completed"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5,
+            "example": 7,
+            "description": "Priority level of the task (1-10)"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "work",
+              "personal",
+              "health",
+              "education",
+              "finance",
+              "home",
+              "shopping",
+              "travel",
+              "social",
+              "hobby"
+            ],
+            "default": "personal",
+            "example": "work",
+            "description": "Category of the task"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-09-15T10:00:00.000Z",
+            "description": "Due date for the task completion"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-08-27T10:30:00.000Z",
+            "description": "Task creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-08-27T11:45:00.000Z",
+            "description": "Task last update timestamp"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "description",
+          "isDone",
+          "priority",
+          "category",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PaginatedTasks": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Task"
+            },
+            "description": "Array of tasks"
+          },
+          "totalItems": {
+            "type": "integer",
+            "example": 25,
+            "description": "Total number of tasks"
+          },
+          "page": {
+            "type": "integer",
+            "example": 1,
+            "description": "Current page number"
+          },
+          "perPage": {
+            "type": "integer",
+            "example": 10,
+            "description": "Number of items per page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "example": 3,
+            "description": "Total number of pages"
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether there is a next page"
+          },
+          "hasPrevPage": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether there is a previous page"
+          }
+        },
+        "required": [
+          "items",
+          "totalItems",
+          "page",
+          "perPage",
+          "totalPages",
+          "hasNextPage",
+          "hasPrevPage"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "example": 400,
+            "description": "HTTP status code"
+          },
+          "message": {
+            "type": "string",
+            "example": "Error message",
+            "description": "Error message"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Specific error message"
+                },
+                "path": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Field path that caused the error"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Error type"
+                },
+                "context": {
+                  "type": "object",
+                  "description": "Additional error context"
+                }
+              }
+            },
+            "description": "Array of detailed error information"
+          }
+        },
+        "required": [
+          "status",
+          "message"
+        ]
+      },
+      "TaskCreate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "Complete project documentation",
+            "description": "Title of the task"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300,
+            "example": "Write comprehensive documentation for the new API endpoints",
+            "description": "Detailed description of the task"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5,
+            "example": 7,
+            "description": "Priority level of the task (1-10)"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "work",
+              "personal",
+              "health",
+              "education",
+              "finance",
+              "home",
+              "shopping",
+              "travel",
+              "social",
+              "hobby"
+            ],
+            "default": "personal",
+            "example": "work",
+            "description": "Category of the task"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-09-15T10:00:00.000Z",
+            "description": "Due date for the task completion"
+          },
+          "isDone": {
+            "type": "boolean",
+            "default": false,
+            "example": false,
+            "description": "Whether the task is completed"
+          }
+        },
+        "required": [
+          "title",
+          "description"
+        ]
+      },
+      "TaskUpdate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "Updated task title",
+            "description": "Title of the task"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300,
+            "example": "Updated task description",
+            "description": "Detailed description of the task"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "example": 8,
+            "description": "Priority level of the task (1-10)"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "work",
+              "personal",
+              "health",
+              "education",
+              "finance",
+              "home",
+              "shopping",
+              "travel",
+              "social",
+              "hobby"
+            ],
+            "example": "health",
+            "description": "Category of the task"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-09-20T15:00:00.000Z",
+            "description": "Due date for the task completion"
+          },
+          "isDone": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the task is completed"
+          }
+        },
+        "minProperties": 1
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "status": 400,
+              "message": "Bad request"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "status": 500,
+              "message": "Internal server error"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "missing_required_fields": {
+                "summary": "Missing required fields",
+                "value": {
+                  "status": 400,
+                  "message": "Title is required"
+                }
+              },
+              "invalid_field_length": {
+                "summary": "Invalid field length",
+                "value": {
+                  "status": 400,
+                  "message": "Title must be at least 3 characters long"
+                }
+              },
+              "empty_update": {
+                "summary": "Empty update",
+                "value": {
+                  "status": 400,
+                  "message": "At least one field must be provided for update"
+                }
+              },
+              "invalid_priority": {
+                "summary": "Invalid priority value",
+                "value": {
+                  "status": 400,
+                  "message": "Priority must be no more than 10"
+                }
+              },
+              "invalid_category": {
+                "summary": "Invalid category",
+                "value": {
+                  "status": 400,
+                  "message": "Category must be one of: work, personal, health, education, finance, home, shopping, travel, social, hobby"
+                }
+              }
+            }
+          }
+        }
+      },
+      "InvalidId": {
+        "description": "Invalid task ID format",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "status": 400,
+              "message": "Invalid task ID format"
+            }
+          }
+        }
+      },
+      "TaskNotFound": {
+        "description": "Task not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "status": 404,
+              "message": "Task not found"
+            }
+          }
+        }
+      }
+    }
+  }
+}

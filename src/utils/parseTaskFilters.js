@@ -1,3 +1,5 @@
+import { TASK_CATEGORIES } from '../constants/index.js';
+
 const parseBoolean = (value) => {
   if (typeof value === 'boolean') return value;
   if (typeof value !== 'string') return;
@@ -19,11 +21,38 @@ const parsePriority = (value) => {
   return Number.isInteger(num) && num >= 1 && num <= 10 ? num : undefined;
 };
 
-export const parseTaskFilters = ({ priority, isDone }) => {
+const parseString = (str) => {
+  if (typeof str !== 'string') return;
+  const trimmed = str.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+};
+
+const parseCategory = (value) => {
+  const parsed = parseString(value);
+  if (!parsed) return;
+  return TASK_CATEGORIES.includes(parsed.toLowerCase())
+    ? parsed.toLowerCase()
+    : undefined;
+};
+
+const parseDate = (value) => {
+  if (!value) return;
+  if (value instanceof Date) return value;
+  if (typeof value !== 'string') return;
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? undefined : date;
+};
+
+export const parseTaskFilters = ({ priority, isDone, category, dueDate }) => {
   const parsedPriority = parsePriority(priority);
   const parsedIsDone = parseBoolean(isDone);
+  const parsedCategory = parseCategory(category);
+  const parsedDueDate = parseDate(dueDate);
+
   return {
     priority: parsedPriority,
     isDone: parsedIsDone,
+    category: parsedCategory,
+    dueDate: parsedDueDate,
   };
 };

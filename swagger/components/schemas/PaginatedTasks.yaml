@@ -1,0 +1,39 @@
+type: object
+properties:
+  items:
+    type: array
+    items:
+      $ref: './Task.yaml'
+    description: Array of tasks
+  totalItems:
+    type: integer
+    example: 25
+    description: Total number of tasks
+  page:
+    type: integer
+    example: 1
+    description: Current page number
+  perPage:
+    type: integer
+    example: 10
+    description: Number of items per page
+  totalPages:
+    type: integer
+    example: 3
+    description: Total number of pages
+  hasNextPage:
+    type: boolean
+    example: true
+    description: Whether there is a next page
+  hasPrevPage:
+    type: boolean
+    example: false
+    description: Whether there is a previous page
+required:
+  - items
+  - totalItems
+  - page
+  - perPage
+  - totalPages
+  - hasNextPage
+  - hasPrevPage

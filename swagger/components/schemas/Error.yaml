@@ -1,0 +1,33 @@
+type: object
+properties:
+  status:
+    type: integer
+    example: 400
+    description: HTTP status code
+  message:
+    type: string
+    example: 'Error message'
+    description: Error message
+  errors:
+    type: array
+    items:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Specific error message
+        path:
+          type: array
+          items:
+            type: string
+          description: Field path that caused the error
+        type:
+          type: string
+          description: Error type
+        context:
+          type: object
+          description: Additional error context
+    description: Array of detailed error information
+required:
+  - status
+  - message

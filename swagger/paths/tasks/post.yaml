@@ -1,0 +1,45 @@
+tags:
+  - Tasks
+summary: Create a new task
+description: Create a new task with title and description
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/schemas/TaskCreate.yaml'
+      examples:
+        basic_task:
+          summary: Basic task creation
+          value:
+            title: 'Complete project documentation'
+            description: 'Write comprehensive documentation for the new API endpoints'
+        full_task:
+          summary: Task with all fields
+          value:
+            title: 'Review code changes'
+            description: 'Review pull request #123 and provide feedback'
+            priority: 8
+            category: 'work'
+            dueDate: '2024-09-15T10:00:00.000Z'
+            isDone: false
+responses:
+  '201':
+    description: Successfully created a task
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created a task!'
+            data:
+              $ref: '../../components/schemas/Task.yaml'
+  '400':
+    $ref: '../../components/responses/ValidationError.yaml'
+  '500':
+    $ref: '../../components/responses/InternalServerError.yaml'

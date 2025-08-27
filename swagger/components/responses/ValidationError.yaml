@@ -1,0 +1,31 @@
+description: Validation error
+content:
+  application/json:
+    schema:
+      $ref: '../schemas/Error.yaml'
+    examples:
+      missing_required_fields:
+        summary: Missing required fields
+        value:
+          status: 400
+          message: 'Title is required'
+      invalid_field_length:
+        summary: Invalid field length
+        value:
+          status: 400
+          message: 'Title must be at least 3 characters long'
+      empty_update:
+        summary: Empty update
+        value:
+          status: 400
+          message: 'At least one field must be provided for update'
+      invalid_priority:
+        summary: Invalid priority value
+        value:
+          status: 400
+          message: 'Priority must be no more than 10'
+      invalid_category:
+        summary: Invalid category
+        value:
+          status: 400
+          message: 'Category must be one of: work, personal, health, education, finance, home, shopping, travel, social, hobby'

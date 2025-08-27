@@ -1,0 +1,10 @@
+BadRequest:
+  $ref: './BadRequest.yaml'
+ValidationError:
+  $ref: './ValidationError.yaml'
+InvalidId:
+  $ref: './InvalidId.yaml'
+TaskNotFound:
+  $ref: './TaskNotFound.yaml'
+InternalServerError:
+  $ref: './InternalServerError.yaml'
